@@ -1,0 +1,38 @@
+[project]
+name = "microduck-bow"
+version = "0.1.0"
+description = "Microduck polite bow task, built on top of pollen-robotics/microduck_rl"
+requires-python = ">=3.12, <3.13"
+dependencies = ["mjlab-microduck"]
+
+[project.entry-points."mjlab.tasks"]
+microduck_bow = "microduck_bow"
+
+[build-system]
+requires = ["uv_build>=0.8.19,<0.9.0"]
+build-backend = "uv_build"
+
+[tool.uv.workspace]
+members = ["microduck_rl"]
+
+# Copied from microduck_rl/pyproject.toml — uv only reads these from the
+# workspace root (overrides) or applies them per-declaring-package (sources),
+# so mirror them here to keep resolution identical to Pollen's lock.
+[tool.uv]
+override-dependencies = [
+    "protobuf>=4.0,<7.0",
+    "onnx>=1.20.1",
+    "zmq ; python_version < '3.0'",
+]
+
+[tool.uv.sources]
+mjlab-microduck = { workspace = true }
+better-actuator-models = { git = "https://github.com/Rhoban/bam.git", branch = "mjlab_frictionloss" }
+torch = [
+  { index = "pytorch-cu129", marker = "sys_platform == 'linux' and platform_machine == 'aarch64'" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cu129"
+url = "https://download.pytorch.org/whl/cu129"
+explicit = true
